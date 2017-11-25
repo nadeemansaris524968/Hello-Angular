@@ -24,6 +24,11 @@
         <option *ngFor="let method of contactMethods" [value]="method.id">{{ method.name }}</option>
       </select>
     </div>
+    <div *ngFor="let method of contactMethods" class="radio">
+      <label for="contactMethodRadio">
+        <input type="radio" ngModel name="contactMethodRadio" [value]="method.id">{{method.name}}
+      </label>
+    </div>
     <div class="checkbox">
       <label for="isSubscribed">
         <input type="checkbox" id="isSubscribed" ngModel name="isSubscribed"> Subscribe to mailing list?
