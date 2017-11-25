@@ -5,12 +5,17 @@ import { Component } from '@angular/core';
     selector: 'courses',
     template: `
         <h2>{{title}}</h2>
-        <img [src]="imageURL" />
+        <table>
+            <tr>
+                <td [attr.colspan]="colspan"></td>
+            </tr>
+        </table>
+
     `
 })
 export class CoursesComponent {
     title = "List of courses";
-    imageURL = "http://google.com/images/cats.png";
+    colspan = 2;
     courses;
 
     constructor(service: CoursesService) {
