@@ -1,31 +1,28 @@
 <form #form="ngForm" (ngSubmit)="submit(form)">
   <div ngModelGroup="contact" #contact="ngModelGroup">
-      <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input 
-            required 
-            minlength="3" 
-            maxlength="10" 
-            pattern="banana" 
-            ngModel #firstName="ngModel" name="firstName" 
-            type="text" id="firstName"
-            class="form-control">
-          <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">
-            <div 
-              *ngIf="firstName.errors.required">
-                First Name is required.</div>
-            <div 
-              *ngIf="firstName.errors.minlength">
-                First Name must be at least {{firstName.errors.minlength.requiredLength}} characters long.</div>
-            <div 
-              *ngIf="firstName.errors.pattern">
-                First Name does not match the pattern.</div>
-          </div>
-        </div>
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input required minlength="3" maxlength="10" pattern="banana" ngModel #firstName="ngModel" name="firstName" type="text" id="firstName"
+        class="form-control">
+      <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">
+        <div *ngIf="firstName.errors.required">
+          First Name is required.</div>
+        <div *ngIf="firstName.errors.minlength">
+          First Name must be at least {{firstName.errors.minlength.requiredLength}} characters long.</div>
+        <div *ngIf="firstName.errors.pattern">
+          First Name does not match the pattern.</div>
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label for="comment">Comment</label>
     <textarea ngModel name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
+    <div class="checkbox">
+      <label for="isSubscribed">
+        <input type="checkbox" id="isSubscribed" ngModel name="isSubscribed"> Subscribe to mailing list?
+      </label>
+    </div>
   </div>
-  <button class="btn btn-primary">Submit</button>
+  <p>{{ form.value | json }}</p>
+  <button class="btn btn-primary" [disabled]="form.invalid">Submit</button>
 </form>
