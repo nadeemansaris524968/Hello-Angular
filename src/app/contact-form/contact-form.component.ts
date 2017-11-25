@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,6 +11,10 @@ export class ContactFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  submit(form:FormGroup){
+    console.log(JSON.stringify(form.value, undefined, 2));
   }
 
 }

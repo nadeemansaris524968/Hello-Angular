@@ -1,7 +1,25 @@
-<form>
+<form #form="ngForm" (ngSubmit)="submit(form)">
   <div class="form-group">
     <label for="firstName">First Name</label>
-    <input ngModel name="firstName" type="text" id="firstName" class="form-control">
+    <input 
+      required 
+      minlength="3" 
+      maxlength="10" 
+      pattern="banana" 
+      ngModel #firstName="ngModel" name="firstName" 
+      type="text" id="firstName"
+      class="form-control">
+    <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">
+      <div 
+        *ngIf="firstName.errors.required">
+          First Name is required.</div>
+      <div 
+        *ngIf="firstName.errors.minlength">
+          First Name must be at least {{firstName.errors.minlength.requiredLength}} characters long.</div>
+      <div 
+        *ngIf="firstName.errors.pattern">
+          First Name does not match the pattern.</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="comment">Comment</label>
