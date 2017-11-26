@@ -5,39 +5,41 @@ import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class DataService {
 
-  constructor(private http: Http, private url: string) { }
+    constructor(private http: Http, private url: string) { }
 
-  getAll() {
-    return this.http.get(this.url)
-      .catch(this.handleError);
-  }
+    getAll() {
+        return this.http.get(this.url)
+            .map(response => response.json())
+            .catch(this.handleError);
+    }
 
-  create(resource) {
-    return this.http.post(this.url, JSON.stringify(resource))
-      .catch(this.handleError);
-  }
+    create(resource) {
+        return this.http.post(this.url, JSON.stringify(resource))
+            .catch(this.handleError);
+    }
 
-  update(resource) {
-    return this.http.put(this.url + '/' + resource.id, JSON.stringify(resource))
-      .catch(this.handleError);
-  }
+    update(resource) {
+        return this.http.put(this.url + '/' + resource.id, JSON.stringify(resource))
+            .catch(this.handleError);
+    }
 
-  delete(id) {
-    return this.http.delete(this.url + '/' + id).catch(this.handleError);
-  }
+    delete(id) {
+        return this.http.delete(this.url + '/' + id).catch(this.handleError);
+    }
 
-  private handleError(error: Response) {
-    if (error.status === 400)
-      return Observable.throw(new BadInputError(error.json()));
+    private handleError(error: Response) {
+        if (error.status === 400)
+            return Observable.throw(new BadInputError(error.json()));
 
-    if (error.status === 404)
-      return Observable.throw(new NotFoundError()); // Legitimate error, not saving
+        if (error.status === 404)
+            return Observable.throw(new NotFoundError()); // Legitimate error, not saving
 
-    return Observable.throw(new AppError(error));
-  }
+        return Observable.throw(new AppError(error));
+    }
 }
