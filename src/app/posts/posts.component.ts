@@ -1,3 +1,6 @@
+import { BadInputError } from '../common/bad-input-error';
+import { NotFoundError } from './../common/not-found-error';
+import { AppError } from './../common/app.error';
 import { PostService } from '../services/post.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -25,23 +28,39 @@ export class PostsComponent implements OnInit {
     input.value = '';
 
     this.service.createPost(post)
-      .subscribe((response) => {
+      .subscribe(
+      (response) => {
         post['id'] = response.json().id;
         this.posts.splice(0, 0, post);
-      }, (error) => {
-        console.log(error);
-      });
+      },
+      (error: AppError) => {
+        if (error instanceof BadInputError) {
+          // this.form.setErrors(error.originalError);
+        }
+        else {
+          alert('Something unexpected occured.');
+          console.log(error);
+        }
+      }
+      );
   }
 
   updatePost(post) {
     // this.http.patch(this.url + '/' + post.id, JSON.stringify({isRead: true})).subscribe((response) => {
     //   console.log(response.json());
     // });
-    this.service.updatePost(post).subscribe((response) => {
-      console.log(response.json());
-    }, (error) => {
-      console.log(error);
-    });
+    this.service.updatePost(post)
+      .subscribe(
+      (response) => {
+        console.log(response.json());
+      },
+      (error: AppError) => {
+        if (error instanceof NotFoundError)
+          alert('Post not found.');
+
+        console.log(error);
+      }
+      );
   }
 
   deletePost(post) {
@@ -52,8 +71,9 @@ export class PostsComponent implements OnInit {
         let index = this.posts.indexOf(post);
         this.posts.splice(index, 1);
       },
-      (error: Response) => {
-        if (error.status === 404) alert('Post has already been deleted')
+      (error: AppError) => {
+        if (error instanceof NotFoundError)
+          alert('Post has already been deleted')
 
         console.log(error);
       }
