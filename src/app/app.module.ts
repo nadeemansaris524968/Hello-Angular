@@ -1,3 +1,4 @@
+import { PostService } from './services/post.service';
 import { HttpModule } from '@angular/http';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +28,8 @@ import { PostsComponent } from './posts/posts.component';
     HttpModule
   ],
   providers: [
-    CoursesService
+    CoursesService,
+    PostService
   ],
   bootstrap: [AppComponent]
 })

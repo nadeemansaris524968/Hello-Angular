@@ -1,4 +1,4 @@
-import { Http } from '@angular/http';
+import { PostService } from '../services/post.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,44 +7,57 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
-  private url = 'http://jsonplaceholder.typicode.com/posts';
   posts = [];
 
-  constructor(private http: Http) {
-    http.get(this.url).subscribe((response) => {
-      this.posts = response.json();
-    }, (error) => {
-      console.log(error);
-    });
-   }
+  constructor(private service: PostService) { }
 
-  createPost(input: HTMLInputElement){
-    let post = { title: input.value };
-    input.value = '';
-    
-    this.http.post(this.url, JSON.stringify(post)).subscribe((response) => {
-      post['id'] = response.json().id;
-      this.posts.splice(0, 0, post);
-    });
+  ngOnInit() {
+    this.service.getPosts()
+      .subscribe((response) => {
+        this.posts = response.json();
+      }, (error) => {
+        console.log(error);
+      });
   }
 
-  updatePost(post){
+  createPost(input: HTMLInputElement) {
+    let post = { title: input.value };
+    input.value = '';
+
+    this.service.createPost(post)
+      .subscribe((response) => {
+        post['id'] = response.json().id;
+        this.posts.splice(0, 0, post);
+      }, (error) => {
+        console.log(error);
+      });
+  }
+
+  updatePost(post) {
     // this.http.patch(this.url + '/' + post.id, JSON.stringify({isRead: true})).subscribe((response) => {
     //   console.log(response.json());
     // });
-    this.http.put(this.url + '/' + post.id, JSON.stringify(post)).subscribe((response) => {
+    this.service.updatePost(post).subscribe((response) => {
       console.log(response.json());
-    });
-  }
-  deletePost(post){
-
-    this.http.delete(this.url + '/' + post.id).subscribe((response) => {
-      let index = this.posts.indexOf(post);
-      this.posts.splice(index, 1);
+    }, (error) => {
+      console.log(error);
     });
   }
 
-  ngOnInit() {
+  deletePost(post) {
+
+    this.service.deletePost(post.id)
+      .subscribe(
+      (response) => {
+        let index = this.posts.indexOf(post);
+        this.posts.splice(index, 1);
+      },
+      (error: Response) => {
+        if (error.status === 404) alert('Post has already been deleted')
+
+        console.log(error);
+      }
+      );
   }
 
 }
