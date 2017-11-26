@@ -15,10 +15,9 @@ export class PostsComponent implements OnInit {
   constructor(private service: PostService) { }
 
   ngOnInit() {
+    // Data Service converts response to JavaScript Array
     this.service.getAll()
-      .subscribe((response) => {
-        this.posts = response;
-      });
+      .subscribe(posts => this.posts = posts);
   }
 
   createPost(input: HTMLInputElement) {
@@ -27,8 +26,8 @@ export class PostsComponent implements OnInit {
 
     this.service.create(post)
       .subscribe(
-        (response) => {
-          post['id'] = response.json().id;
+        (newPost) => {
+          post['id'] = newPost.id;
           this.posts.splice(0, 0, post);
         },
         (error: AppError) => {
@@ -46,8 +45,8 @@ export class PostsComponent implements OnInit {
     // });
     this.service.update(post)
       .subscribe(
-        (response) => {
-          console.log(response.json());
+        (updatedPost) => {
+          console.log(updatedPost.json());
         });
   }
 
@@ -55,7 +54,7 @@ export class PostsComponent implements OnInit {
 
     this.service.delete(post.id)
       .subscribe(
-        (response) => {
+        () => {
           let index = this.posts.indexOf(post);
           this.posts.splice(index, 1);
         },
