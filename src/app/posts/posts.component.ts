@@ -18,8 +18,6 @@ export class PostsComponent implements OnInit {
     this.service.getPosts()
       .subscribe((response) => {
         this.posts = response.json();
-      }, (error) => {
-        console.log(error);
       });
   }
 
@@ -29,19 +27,16 @@ export class PostsComponent implements OnInit {
 
     this.service.createPost(post)
       .subscribe(
-      (response) => {
-        post['id'] = response.json().id;
-        this.posts.splice(0, 0, post);
-      },
-      (error: AppError) => {
-        if (error instanceof BadInputError) {
-          // this.form.setErrors(error.originalError);
+        (response) => {
+          post['id'] = response.json().id;
+          this.posts.splice(0, 0, post);
+        },
+        (error: AppError) => {
+          if (error instanceof BadInputError) {
+            // this.form.setErrors(error.originalError);
+          }
+          else throw error;
         }
-        else {
-          alert('Something unexpected occured.');
-          console.log(error);
-        }
-      }
       );
   }
 
@@ -51,32 +46,24 @@ export class PostsComponent implements OnInit {
     // });
     this.service.updatePost(post)
       .subscribe(
-      (response) => {
-        console.log(response.json());
-      },
-      (error: AppError) => {
-        if (error instanceof NotFoundError)
-          alert('Post not found.');
-
-        console.log(error);
-      }
-      );
+        (response) => {
+          console.log(response.json());
+        });
   }
 
   deletePost(post) {
 
     this.service.deletePost(post.id)
       .subscribe(
-      (response) => {
-        let index = this.posts.indexOf(post);
-        this.posts.splice(index, 1);
-      },
-      (error: AppError) => {
-        if (error instanceof NotFoundError)
-          alert('Post has already been deleted')
-
-        console.log(error);
-      }
+        (response) => {
+          let index = this.posts.indexOf(post);
+          this.posts.splice(index, 1);
+        },
+        (error: AppError) => {
+          if (error instanceof NotFoundError)
+            alert('Post has already been deleted')
+          else throw error;
+        }
       );
   }
 
