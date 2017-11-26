@@ -1,38 +1,29 @@
-<form [formGroup]="form">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input 
-            formControlName="username"
-            id="username" 
-            type="text" 
-            class="form-control">
-        <div *ngIf="username.pending">Checking for uniqueness...</div>
-        <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
-            <div 
-                *ngIf="username.errors.required">
+<form [formGroup]="form" (ngSubmit)="login()">
+    <div formGroupName="account">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input formControlName="username" id="username" type="text" class="form-control">
+            <div *ngIf="username.pending">Checking for uniqueness...</div>
+            <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
+                <div *ngIf="username.errors.required">
                     Username is required.
-            </div>
-            <div 
-                *ngIf="username.errors.minlength">
+                </div>
+                <div *ngIf="username.errors.minlength">
                     Username must be minimum {{username.errors.minlength.requiredLength}} characters long.
-            </div>
-            <div 
-                *ngIf="username.errors.cannotContainSpace">
+                </div>
+                <div *ngIf="username.errors.cannotContainSpace">
                     Username cannot contain spaces.
-            </div>
-            <div 
-                *ngIf="username.errors.shouldBeUnique">
+                </div>
+                <div *ngIf="username.errors.shouldBeUnique">
                     Username has already been taken.
+                </div>
             </div>
         </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input formControlName="password" id="password" type="text" class="form-control">
+        </div>
     </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input 
-            formControlName="password"
-            id="password" 
-            type="text" 
-            class="form-control">
-    </div>
+    <p>{{ form.value | json }}</p>
     <button class="btn btn-primary" type="submit">Sign Up</button>
 </form>
