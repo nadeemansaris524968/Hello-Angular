@@ -1,4 +1,5 @@
-import { FormsModule } from '@angular/forms';
+import { SignupFormComponent } from './signup-form/signup-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoursesService } from './courses.service';
 import { CoursesComponent } from './courses.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,11 +14,13 @@ import { ContactFormComponent } from './contact-form/contact-form.component';
     AppComponent,
     CoursesComponent,
     CourseComponent,
-    ContactFormComponent
+    ContactFormComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     CoursesService
